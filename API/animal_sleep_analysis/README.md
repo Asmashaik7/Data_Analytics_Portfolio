@@ -6,57 +6,57 @@ Data was loaded from an external source and analyzed using Python.
 
 🎯 Objectives
 
-Analyze total sleep and REM sleep patterns
+* Analyze total sleep and REM sleep patterns
 
-Study sleep variation by:
+* Study sleep variation by:
 
-Animal order
+* Animal order
 
-Dietary category (vore)
+* Dietary category (vore)
 
-Body weight
+* Body weight
 
-Identify key biological and environmental drivers of sleep
+* Identify key biological and environmental drivers of sleep
 
 🛠️ Tools Used
 
-Python
+* Python
 
-Pandas
+* Pandas
 
-Matplotlib
+* Matplotlib
 
-Jupyter Notebook
+* Jupyter Notebook
 
 🔍 Key Analysis
 
-Univariate analysis of total sleep, REM sleep, and sleep cycle
+* Univariate analysis of total sleep, REM sleep, and sleep cycle
 
-Bivariate analysis by:
+* Bivariate analysis by:
 
-Animal order
+* Animal order
 
-Dietary category
+* Dietary category
 
-Body weight
+* Body weight
 
-Species-level validation to support group-level insights
+* Species-level validation to support group-level insights
 
-Scatter plot (log scale) for body weight vs total sleep
+* Scatter plot (log scale) for body weight vs total sleep
 
 ✅ Key Findings
 
-Total sleep varies widely across animal species.
+* Total sleep varies widely across animal species.
 
-Small-bodied animals sleep significantly more than large-bodied animals.
+* Small-bodied animals sleep significantly more than large-bodied animals.
 
-Large-bodied animals show very low total sleep duration.
+* Large-bodied animals show very low total sleep duration.
 
-Aquatic animals sleep less than land animals of similar body weight.
+* Aquatic animals sleep less than land animals of similar body weight.
 
-Dietary category partially explains sleep patterns.
+* Dietary category partially explains sleep patterns.
 
-REM sleep shows high variability and missing data, making it less consistent than total sleep.
+* REM sleep shows high variability and missing data, making it less consistent than total sleep.
 
 🧠 Conclusion
 
