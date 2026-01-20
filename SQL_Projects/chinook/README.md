@@ -78,11 +78,10 @@ This project includes organized SQL scripts covering:
 
 - Ranking and analytical queries using window functions
 
-🔗 Project Link
+**📂 Project Files**
 
-👉 Full SQL scripts available here:
-https://github.com/Asmashaik7/Sql_Python/tree/main/Chinook
+All database setup scripts and analytical SQL queries are included in this project folder.
 
-🧠 Key Takeaway
+**🧠 Key Takeaway**
 
 This project strengthened my ability to analyze real-world relational data using SQL Server (T-SQL) and improved my confidence in writing queries that support business-driven decision making.
