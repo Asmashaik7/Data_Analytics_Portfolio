@@ -50,10 +50,76 @@ SELECT
     ROUND(SUM(payment_value), 2) AS total_revenue
 FROM olist_order_payments_dataset;
 
+
 -- Result: 16,008,872.12
 -- Insight: Olist generated approximately 16 million BRL in total revenue 
 -- from all payment transactions between 2016-2018
 
+
+--using order items dataset
+SELECT 
+    ROUND(SUM(price+freight_value),2) AS total_revenue
+FROM olist_order_items_dataset;
+
+--analysis
+SELECT 
+    COUNT(DISTINCT order_id) AS total_distinct_orders
+FROM olist_order_payments_dataset;
+
+SELECT 
+    COUNT(DISTINCT order_id)
+FROM olist_order_items_dataset;
+
+SELECT COUNT(DISTINCT p.order_id)
+FROM olist_order_payments_dataset p
+LEFT JOIN olist_order_items_dataset oi
+    ON p.order_id = oi.order_id
+WHERE oi.order_id IS NULL;
+
+--Revenue calculated using payment_value to reflect actual transaction inflow. Cross-validated against order_items aggregation, revealing 775 orders with payment records but no associated items.
+
+SELECT COUNT(DISTINCT oi.order_id)
+FROM olist_order_items_dataset oi
+LEFT JOIN olist_order_payments_dataset p
+    ON oi.order_id = p.order_id
+WHERE p.order_id IS NULL;
+
+SELECT DISTINCT oi.order_id
+FROM olist_order_items_dataset oi
+LEFT JOIN olist_order_payments_dataset p
+    ON oi.order_id = p.order_id
+WHERE p.order_id IS NULL;
+
+SELECT order_status
+FROM olist_orders_dataset
+WHERE order_id = 'bfbd0f9bdef84302105ad712db648a6c'; --delivered
+
+SELECT *
+FROM olist_orders_dataset
+WHERE order_id = 'bfbd0f9bdef84302105ad712db648a6c';
+
+SELECT *
+FROM olist_order_items_dataset
+WHERE order_id = 'bfbd0f9bdef84302105ad712db648a6c';
+
+-- ============================================================
+-- Data Reconciliation: Orders present in payments but missing in order_items
+-- Purpose: Identify structural inconsistencies between transaction tables.
+-- Result: 775 distinct orders found.
+-- ============================================================ 
+SELECT COUNT(DISTINCT p.order_id)
+FROM olist_order_payments_dataset p
+LEFT JOIN olist_order_items_dataset oi
+    ON p.order_id = oi.order_id
+WHERE oi.order_id IS NULL;
+
+-- ============================================================
+-- Edge Case Analysis:
+-- Identified 1 delivered order present in order_items but 
+-- missing in order_payments.
+-- Order ID: bfbd0f9bdef84302105ad712db648a6c
+-- Impact: Negligible (<0.001% of total orders)
+-- ============================================================
 
 -- =============================================================
 -- Q4: Which product categories have generated the most revenue?
