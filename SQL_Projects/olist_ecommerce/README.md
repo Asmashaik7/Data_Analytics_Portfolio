@@ -15,6 +15,28 @@ The goal was to answer real business questions a data analyst would face in an e
 
 ---
 
+## 🗂️ Dataset Description
+
+The Olist dataset contains 9 tables in total. This SQL analysis uses 5 core tables.  Remaining 4 tables (sellers, reviews, geolocation, category translation) 
+ will be incorporated in the upcoming Power BI dashboard extension.
+ 
+The dataset contains transactional data from **2016 to 2018** across multiple tables:
+
+| Table | Description | Rows |
+|-------|-------------|------|
+| olist_customers_dataset | Customer information and location | 99,441 |
+| olist_orders_dataset | Order status and timestamps | 99,441 |
+| olist_order_items_dataset | Products per order with price and freight | 112,650 |
+| olist_products_dataset | Product catalog with categories | 32,951 |
+| olist_order_payments_dataset | Payment methods and values | 103,886 |
+
+> **Data Quality Note:** The products table contains a known column name typo — `product_lenght_cm` instead of `product_length_cm`. This is preserved as-is from the original Olist dataset.
+
+> **Customer ID Note:** Olist uses two customer identifiers — `customer_id` at order level and `customer_unique_id` at person level. All unique customer analysis uses `customer_unique_id` for accuracy.
+
+
+---
+
 ## 🛠️ Tools & Skills Used
 
 | Category | Details |
@@ -25,23 +47,6 @@ The goal was to answer real business questions a data analyst would face in an e
 | **Intermediate** | Multi-table JOINs, CASE statements, DATE functions (DATEDIFF, MONTH, YEAR) |
 | **Advanced** | CTEs (Common Table Expressions), Window Functions (RANK, DENSE_RANK, LAG, SUM OVER) |
 | **Data Quality** | Cross-table reconciliation, NULL handling with ISNULL() |
-
----
-
-## 📊 Dataset Structure
-
-The Olist dataset contains 9 tables in total. This SQL analysis uses 5 core tables:
-
-```
-olist_customers_dataset       ← customer details and location
-olist_orders_dataset          ← order status and timestamps
-olist_order_items_dataset     ← product items per order
-olist_order_payments_dataset  ← payment methods and values
-olist_products_dataset        ← product categories
-```
-
-> 📌 Remaining 4 tables (sellers, reviews, geolocation, category translation) 
-> will be incorporated in the upcoming Power BI dashboard extension.
 
 ---
 
