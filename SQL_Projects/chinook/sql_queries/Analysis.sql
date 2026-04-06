@@ -1,4 +1,4 @@
--- Question: Find employees who report to the IT Manager
+-- SECTION 1: Find employees who report to the IT Manager
 
 USE Chinook;
 
@@ -65,7 +65,8 @@ ORDER BY TotalSpent DESC;
    Which artists generate the highest sales revenue?
    ========================================================= */
 
-SELECT ar.Name AS Artist,
+SELECT Top 10 ar.ArtistId,
+       ar.Name AS Artist,
        SUM(il.UnitPrice * il.Quantity) AS TotalSales
 FROM InvoiceLine il
 JOIN Track t 
@@ -74,9 +75,339 @@ JOIN Album al
 ON t.AlbumId = al.AlbumId
 JOIN Artist ar 
 ON al.ArtistId = ar.ArtistId
-GROUP BY ar.Name
-ORDER BY TotalSales DESC
-LIMIT 10;
+GROUP BY ar.ArtistId, ar.Name
+ORDER BY TotalSales DESC;
+
+/*Result:
+ArtistId | ArtistName | TotalSales
+90  Iron Maiden                 68.31
+50  Metallica                   61.38
+150 U2                          51.48
+22  Led Zeppelin                44.55
+149 Lost                        39.80
+113 Os Paralamas Do Sucesso     30.69
+124 R.E.M.                      30.69
+82  Faith No More               25.74
+118 Pearl Jam                   23.76
+58  Deep Purple                 23.76
+
+-- Business Insight:
+-- A small number of artists generate a large share of total revenue.
+-- Iron Maiden leads overall sales, suggesting strong customer demand for their tracks in the Chinook store.
+
+ =========================================================
+SECTION 5: Most Popular Music Genres
+
+Business Question:
+Which music genres are purchased the most by customers in the Chinook store?
+ =========================================================*/
+ 
+ SELECT TOP 5 
+       g.GenreId,
+       g.Name AS Genre,
+       SUM(il.Quantity) AS TracksSold
+FROM Genre g
+JOIN Track t
+     ON g.GenreId = t.GenreId
+JOIN InvoiceLine il
+     ON t.TrackId = il.TrackId
+GROUP BY g.GenreId, g.Name
+ORDER BY TracksSold DESC;
+
+/*Result:
+1	Rock	487
+7	Latin	207
+4	Alternative & Punk	158
+3	Metal	146
+2	Jazz	44*/
+
+-- Business Insight:
+-- Rock music strongly dominates customer purchases in the Chinook store,
+-- indicating that rock artists contribute heavily to overall demand.
+
+/* =========================================================
+   SECTION 6: Top Revenue-Generating Music Genres
+
+   Business Question:
+   Which music genres generate the highest total revenue 
+   from track purchases in the Chinook store?
+   ========================================================= */
+
+select top 5 g.genreid,g.Name,
+ sum(il.Unitprice*il.quantity) as Total_revenue
+ from genre g
+ join Track t
+ on g.genreid=t.genreid
+ join InvoiceLine il
+ on t.TrackId=il.trackid
+ group by g.genreid,g.Name
+ order by Total_revenue desc;
+
+/*Result:
+1	Rock	482.13
+7	Latin	204.93
+4	Alternative & Punk	156.42
+3	Metal	144.54
+2	Jazz	43.56*/
+
+-- Business Insight:
+-- Rock dominates genre revenue in the Chinook store, indicating strong
+-- customer demand for rock-related tracks. Latin and Alternative & Punk
+-- also contribute significantly but remain far behind Rock in total sales.
+
+/* =========================================================
+   SECTION 7: Revenue by Country
+
+   Business Question:
+   Which countries generate the highest total revenue 
+   for the Chinook music store?
+   ========================================================= */
+   select top 10 BillingCountry,
+   sum(total) as total_revenue_by_country
+   from Invoice
+   group by BillingCountry
+   order by total_revenue_by_country desc;
+
+/*Result:
+USA              523.06
+Canada           303.96
+France           195.10
+Brazil           190.10
+Germany          156.48
+United Kingdom   112.86
+Czech Republic    90.24
+Portugal          77.24
+India             75.26
+Chile             46.62*/
 
 -- Insight:
--- Identifies the artists contributing the most revenue to the store.
+-- The United States generates the highest revenue (523.06) for the Chinook store,
+-- making it the largest market. Canada and France follow as the next strongest
+-- contributors, while countries like India and Chile generate comparatively lower revenue.
+
+/* =========================================================
+   SECTION 8: Top Customer in Each Country
+
+   Business Question:
+   Which customers generate the highest revenue 
+   within each country in the Chinook store?
+   ========================================================= */
+   use chinook;
+   select * 
+   from
+   (
+   select c.customerid,c.FirstName,c.LastName,
+   i.Billingcountry,
+   sum(i.total) as Total_revenue_country,
+   row_number() over(partition by Billingcountry order by sum(i.total) desc )as rn
+   from Customer c
+   join invoice i
+   on c.CustomerId=i.CustomerID
+   group by c.customerid,c.FirstName,c.LastName,i.Billingcountry
+   ) t
+   where rn=1;
+
+/*Result:
+56	Diego	Gutiérrez	Argentina	37.62	1
+55	Mark	Taylor	Australia	37.62	1
+7	Astrid	Gruber	Austria	42.62	1
+8	Daan	Peeters	Belgium	37.62	1
+1	Luís	Gonçalves	Brazil	39.62	1
+3	François	Tremblay	Canada	39.62	1
+57	Luis	Rojas	Chile	46.62	1
+6	Helena	Holý	Czech Republic	49.62	1
+9	Kara	Nielsen	Denmark	37.62	1
+44	Terhi	Hämäläinen	Finland	41.62	1
+43	Isabelle	Mercier	France	40.62	1
+37	Fynn	Zimmermann	Germany	43.62	1
+45	Ladislav	Kovács	Hungary	45.62	1
+58	Manoj	Pareek	India	38.62	1
+46	Hugh	O'Reilly	Ireland	45.62	1
+47	Lucas	Mancini	Italy	37.62	1
+48	Johannes	Van der Berg	Netherlands	40.62	1
+4	Bjørn	Hansen	Norway	39.62	1
+49	Stanisław	Wójcik	Poland	37.62	1
+34	João	Fernandes	Portugal	39.62	1
+50	Enrique	Muñoz	Spain	37.62	1
+51	Joakim	Johansson	Sweden	38.62	1
+52	Emma	Jones	United Kingdom	37.62	1
+26	Richard	Cunningham	USA	47.62	1*/
+
+-- Note:
+-- ROW_NUMBER() is used to return one top customer per country.
+-- RANK() can be used instead if ties should be included.
+
+-- Business Insight:
+-- Top customers across countries contribute similar levels of revenue,
+-- with slight variation. Helena Holý in the Czech Republic stands out as the highest-spending individual customer in the dataset.
+
+/* =========================================================
+   SECTION 9: Best Selling Track per Genre
+
+   Business Question:
+   Which track is the most purchased within each genre
+   in the Chinook music store?
+   ========================================================= */
+
+SELECT GenreName,TrackName,TrackSold
+FROM (
+    SELECT g.Name as GenreName,
+            t.Name as TrackName,
+           sum(il.quantity) as TrackSold,
+           ROW_NUMBER() OVER (PARTITION BY g.Name ORDER BY sum(il.quantity) desc) AS rn
+    FROM genre g
+    join track t
+    on g.genreid=t.genreid
+    join invoiceline il
+    on t.trackid=il.trackid
+    group by g.name,t.name
+    ) t
+WHERE rn = 1;
+
+/*
+Result:
+Alternative	All Night Thing	1
+Alternative & Punk	Untitled	2
+Blues	Travis Walk	2
+Bossa Nova	Onde Anda Você	1
+Classical	Act IV, Symphony	1
+Comedy	Phyllis's Wedding	1
+Drama	The Fix	2
+Easy Listening	Mack The Knife	1
+Electronica/Dance	Todo o Carnaval tem seu Fim	1
+Heavy Metal	Genghis Khan	1
+Hip Hop/Rap	Nega Do Cabelo Duro	2
+Jazz	End Of Romanticism	2
+Latin	Meditação	2
+Metal	Master Of Puppets	2
+Pop	Gimme Some Truth	2
+R&B/Soul	Save The Children	2
+Reggae	Firmamento	2
+Rock	Dazed and Confused	4
+Rock And Roll	Rock 'N' Roll Music	1
+Sci Fi & Fantasy	Experiment In Terra	1
+Science Fiction	The Woman King	2
+Soundtrack	Plot 180	2
+TV Shows	Walkabout	2
+World	Já Foi	1*/
+
+-- Insight:
+-- This analysis identifies the most purchased track within each genre.
+-- "Dazed and Confused" is the top-selling track in the Rock genre with the highest number of purchases (4).
+
+-- Business Insight:
+-- The best-selling track varies across genres, with relatively low purchase counts per track. This indicates a wide distribution of
+-- customer preferences rather than dominance by a few tracks.
+
+/* =========================================================
+   SECTION 10: Monthly Revenue Trend
+
+   Business Question:
+   How does revenue change over time on a monthly basis
+   in the Chinook music store?
+   ========================================================= */
+
+   select year(invoicedate) as Year,
+            month(invoicedate) as Month,
+            sum(total) as Total
+from INVOICE
+group by Year(invoicedate),Month(invoicedate)
+order by Year,Month;
+
+/*
+Result:
+-- Result:
+-- 2021 1 35.64
+-- 2021 2 37.62
+-- ...
+-- 2025 11 49.62
+-- 2025 12 38.62*/
+
+-- Insight:
+-- Monthly revenue in the Chinook store remains relatively stable over time,
+-- with most months generating similar revenue (~37.62). However, occasional
+-- spikes in certain months indicate periods of higher sales activity,
+-- while a few months show lower revenue, suggesting variability in customer purchases.
+
+/* =========================================================
+   SECTION 11: Sales Representative Performance
+
+   Business Question:
+   Which sales representatives generate the highest revenue
+   for the Chinook music store?
+   ========================================================= */
+   use chinook;
+
+   select e.employeeId, e.Firstname,e.lastname, sum(i.total) as TotalRevenue
+   from Employee e
+   join Customer c
+   on e.EmployeeId=c.SupportRepId
+   join invoice i
+   on c.CustomerID=i.CustomerID
+   group by e.employeeId, e.Firstname,e.lastname
+   order by TotalRevenue desc;
+
+   /* Result:
+   3	Jane	Peacock	833.04
+    4	Margaret	Park	775.40
+    5	Steve	Johnson	720.16 */
+
+   -- Insight:
+-- Jane Peacock leads in revenue generation among sales representatives,
+-- indicating strong customer performance, followed by Margaret Park
+-- and Steve Johnson.
+
+/* =========================================================
+   SECTION 12: Top Selling Tracks Overall
+
+   Business Question:
+   Which tracks are purchased the most overall
+   in the Chinook music store?
+   ========================================================= */
+
+   SELECT top 10 t.Name AS TrackName,
+       SUM(il.Quantity) AS TotalSold
+FROM Track t
+JOIN InvoiceLine il
+    ON t.TrackId = il.TrackId
+GROUP BY t.Name
+ORDER BY TotalSold DESC;
+
+-- Insight:
+-- Multiple tracks share the highest purchase count (4), indicating no single
+-- dominant track. Customer purchases are distributed across several popular
+-- songs, suggesting diverse listening preferences.
+
+-- Note:
+-- Multiple tracks have equal top sales, which could also be analyzed using
+-- RANK() instead of TOP to include all tied results.
+
+SELECT TrackName, TotalSold
+FROM (
+    SELECT t.Name AS TrackName,
+           SUM(il.Quantity) AS TotalSold,
+           RANK() OVER (
+               ORDER BY SUM(il.Quantity) DESC
+           ) AS rnk
+    FROM Track t
+    JOIN InvoiceLine il
+        ON t.TrackId = il.TrackId
+    GROUP BY t.Name
+) t
+WHERE rnk = 1;
+
+-- Insight:
+-- Multiple tracks share the highest purchase count, indicating no single
+-- dominant track. Using RANK() ensures all top-performing tracks are included,
+-- reflecting equal customer preference among them.
+
+/* =========================================================
+   FINAL SUMMARY
+
+   -- Key Insights:
+   -- Rock dominates genre sales.
+   -- Revenue is stable over time.
+   -- USA is the top market.
+   -- Sales reps contribute differently to revenue.
+
+   ========================================================= */
