@@ -2,8 +2,7 @@
 
 USE Chinook;
 
-SELECT FirstName,
-       LastName,
+SELECT FirstName+' '+LastName as Name,
        ReportsTo
 FROM Employee
 WHERE ReportsTo = (
@@ -12,12 +11,14 @@ WHERE ReportsTo = (
     WHERE Title = 'IT Manager'
 );
 
--- Result
--- Robert  King       6
--- Laura   Callahan   6
+/*Result
+Name	ReportsTo
+Robert King	6
+Laura Callahan	6 */
 
 -- Insight
 -- Two employees (Robert King and Laura Callahan) report directly to the IT Manager.
+
 
 /* =========================================================
    SECTION 2: Customers with High Purchase Frequency
@@ -34,9 +35,17 @@ FROM Invoice
 GROUP BY CustomerId
 HAVING COUNT(InvoiceId) > 6;
 
+/*Results:
+CustomerId	Total_Invoices
+1	7
+2	7
+..
+57	7
+58	7
+*/
+
 -- Insight:
--- These customers have made more than 6 purchases, indicating high engagement
--- and potential candidates for loyalty programs or targeted promotions.
+-- These customers have made more than 6 purchases, indicating high engagement and potential candidates for loyalty programs or targeted promotions.
 
 /* =========================================================
    SECTION 3: Top Revenue Generating Customers
@@ -45,14 +54,24 @@ HAVING COUNT(InvoiceId) > 6;
    ========================================================= */
 
 SELECT c.CustomerId,
-       c.FirstName,
-       c.LastName,
+       c.FirstName+' '+c.LastName as Name,
        SUM(i.Total) AS TotalSpent
 FROM Customer c
 JOIN Invoice i
 ON c.CustomerId = i.CustomerId
 GROUP BY c.CustomerId, c.FirstName, c.LastName
 ORDER BY TotalSpent DESC;
+
+/*Result:
+CustomerId	Name	TotalSpent
+6	Helena Holý	49.62
+26	Richard Cunningham	47.62
+57	Luis Rojas	46.62
+....
+38	Niklas Schröder	37.62
+47	Lucas Mancini	37.62
+59	Puja Srivastava	36.64 */
+
 
 -- Insight:
 -- Helena Holý is the highest spending customer (49.62).
@@ -65,7 +84,8 @@ ORDER BY TotalSpent DESC;
    Which artists generate the highest sales revenue?
    ========================================================= */
 
-SELECT Top 10 ar.ArtistId,
+SELECT Top 10 
+       ar.ArtistId,
        ar.Name AS Artist,
        SUM(il.UnitPrice * il.Quantity) AS TotalSales
 FROM InvoiceLine il
@@ -79,17 +99,17 @@ GROUP BY ar.ArtistId, ar.Name
 ORDER BY TotalSales DESC;
 
 /*Result:
-ArtistId | ArtistName | TotalSales
-90  Iron Maiden                 68.31
-50  Metallica                   61.38
-150 U2                          51.48
-22  Led Zeppelin                44.55
-149 Lost                        39.80
-113 Os Paralamas Do Sucesso     30.69
-124 R.E.M.                      30.69
-82  Faith No More               25.74
-118 Pearl Jam                   23.76
-58  Deep Purple                 23.76
+ArtistId	Artist	TotalSales
+90	Iron Maiden	68.31
+50	Metallica	61.38
+150	U2	51.48
+22	Led Zeppelin	44.55
+149	Lost	39.80
+113	Os Paralamas Do Sucesso	30.69
+124	R.E.M.	30.69
+82	Faith No More	25.74
+118	Pearl Jam	23.76
+58	Deep Purple	23.76
 
 -- Business Insight:
 -- A small number of artists generate a large share of total revenue.
@@ -115,15 +135,16 @@ GROUP BY g.GenreId, g.Name
 ORDER BY TracksSold DESC;
 
 /*Result:
+GenreId	Genre	TracksSold
 1	Rock	487
 7	Latin	207
 4	Alternative & Punk	158
 3	Metal	146
-2	Jazz	44*/
+2	Jazz	44
+*/
 
 -- Business Insight:
--- Rock music strongly dominates customer purchases in the Chinook store,
--- indicating that rock artists contribute heavily to overall demand.
+-- Rock music strongly dominates customer purchases in the Chinook store,indicating that rock artists contribute heavily to overall demand.
 
 /* =========================================================
    SECTION 6: Top Revenue-Generating Music Genres
@@ -144,16 +165,17 @@ select top 5 g.genreid,g.Name,
  order by Total_revenue desc;
 
 /*Result:
+genreid	Name	Total_revenue
 1	Rock	482.13
 7	Latin	204.93
 4	Alternative & Punk	156.42
 3	Metal	144.54
-2	Jazz	43.56*/
+2	Jazz	43.56
+*/
 
 -- Business Insight:
--- Rock dominates genre revenue in the Chinook store, indicating strong
--- customer demand for rock-related tracks. Latin and Alternative & Punk
--- also contribute significantly but remain far behind Rock in total sales.
+-- Rock dominates genre revenue in the Chinook store, indicating strong customer demand for rock-related tracks. 
+-- Latin and Alternative & Punk also contribute significantly but remain far behind Rock in total sales.
 
 /* =========================================================
    SECTION 7: Revenue by Country
@@ -169,21 +191,23 @@ select top 5 g.genreid,g.Name,
    order by total_revenue_by_country desc;
 
 /*Result:
-USA              523.06
-Canada           303.96
-France           195.10
-Brazil           190.10
-Germany          156.48
-United Kingdom   112.86
-Czech Republic    90.24
-Portugal          77.24
-India             75.26
-Chile             46.62*/
+BillingCountry	total_revenue_by_country
+USA	523.06
+Canada	303.96
+France	195.10
+Brazil	190.10
+Germany	156.48
+United Kingdom	112.86
+Czech Republic	90.24
+Portugal	77.24
+India	75.26
+Chile	46.62
+*/
 
 -- Insight:
--- The United States generates the highest revenue (523.06) for the Chinook store,
--- making it the largest market. Canada and France follow as the next strongest
--- contributors, while countries like India and Chile generate comparatively lower revenue.
+-- The United States generates the highest revenue (523.06) for the Chinook store,making it the largest market.
+-- Canada and France follow as the next strongest contributors.
+-- While countries like India and Chile generate comparatively lower revenue.
 
 /* =========================================================
    SECTION 8: Top Customer in Each Country
@@ -193,10 +217,11 @@ Chile             46.62*/
    within each country in the Chinook store?
    ========================================================= */
    use chinook;
+
    select * 
    from
    (
-   select c.customerid,c.FirstName,c.LastName,
+   select c.customerid,c.FirstName +' '+c.LastName as Name,
    i.Billingcountry,
    sum(i.total) as Total_revenue_country,
    row_number() over(partition by Billingcountry order by sum(i.total) desc )as rn
@@ -208,38 +233,26 @@ Chile             46.62*/
    where rn=1;
 
 /*Result:
-56	Diego	Gutiérrez	Argentina	37.62	1
-55	Mark	Taylor	Australia	37.62	1
-7	Astrid	Gruber	Austria	42.62	1
-8	Daan	Peeters	Belgium	37.62	1
-1	Luís	Gonçalves	Brazil	39.62	1
-3	François	Tremblay	Canada	39.62	1
-57	Luis	Rojas	Chile	46.62	1
-6	Helena	Holý	Czech Republic	49.62	1
-9	Kara	Nielsen	Denmark	37.62	1
-44	Terhi	Hämäläinen	Finland	41.62	1
-43	Isabelle	Mercier	France	40.62	1
-37	Fynn	Zimmermann	Germany	43.62	1
-45	Ladislav	Kovács	Hungary	45.62	1
-58	Manoj	Pareek	India	38.62	1
-46	Hugh	O'Reilly	Ireland	45.62	1
-47	Lucas	Mancini	Italy	37.62	1
-48	Johannes	Van der Berg	Netherlands	40.62	1
-4	Bjørn	Hansen	Norway	39.62	1
-49	Stanisław	Wójcik	Poland	37.62	1
-34	João	Fernandes	Portugal	39.62	1
-50	Enrique	Muñoz	Spain	37.62	1
-51	Joakim	Johansson	Sweden	38.62	1
-52	Emma	Jones	United Kingdom	37.62	1
-26	Richard	Cunningham	USA	47.62	1*/
+customerid	Name	Billingcountry	Total_revenue_country	rn
+56	Diego Gutiérrez	Argentina	37.62	1
+55	Mark Taylor	Australia	37.62	1
+...
+6	Helena Holý	Czech Republic	49.62	1
+9	Kara Nielsen	Denmark	37.62	1
+...
+52	Emma Jones	United Kingdom	37.62	1
+26	Richard Cunningham	USA	47.62	1
+*/
 
 -- Note:
 -- ROW_NUMBER() is used to return one top customer per country.
 -- RANK() can be used instead if ties should be included.
+-- Full result includes top customers for all countries.
 
 -- Business Insight:
--- Top customers across countries contribute similar levels of revenue,
--- with slight variation. Helena Holý in the Czech Republic stands out as the highest-spending individual customer in the dataset.
+-- Each country has a top-performing customer.
+-- Top customers across countries contribute similar levels of revenue, with slight variation.
+-- Helena Holý in the Czech Republic stands out as the highest-spending individual customer in the dataset.
 
 /* =========================================================
    SECTION 9: Best Selling Track per Genre
@@ -266,30 +279,14 @@ WHERE rn = 1;
 
 /*
 Result:
+GenreName	TrackName	TrackSold
 Alternative	All Night Thing	1
 Alternative & Punk	Untitled	2
-Blues	Travis Walk	2
-Bossa Nova	Onde Anda Você	1
-Classical	Act IV, Symphony	1
-Comedy	Phyllis's Wedding	1
-Drama	The Fix	2
-Easy Listening	Mack The Knife	1
-Electronica/Dance	Todo o Carnaval tem seu Fim	1
-Heavy Metal	Genghis Khan	1
-Hip Hop/Rap	Nega Do Cabelo Duro	2
-Jazz	End Of Romanticism	2
-Latin	Meditação	2
-Metal	Master Of Puppets	2
-Pop	Gimme Some Truth	2
-R&B/Soul	Save The Children	2
-Reggae	Firmamento	2
+...
 Rock	Dazed and Confused	4
-Rock And Roll	Rock 'N' Roll Music	1
-Sci Fi & Fantasy	Experiment In Terra	1
-Science Fiction	The Woman King	2
-Soundtrack	Plot 180	2
-TV Shows	Walkabout	2
-World	Já Foi	1*/
+...
+World	Já Foi	1
+*/
 
 -- Insight:
 -- This analysis identifies the most purchased track within each genre.
@@ -316,53 +313,52 @@ order by Year,Month;
 
 /*
 Result:
--- Result:
--- 2021 1 35.64
--- 2021 2 37.62
--- ...
--- 2025 11 49.62
--- 2025 12 38.62*/
+Year	Month	Total
+2021	1	35.64
+2021	2	37.62
+...
+2025	11	49.62
+2025	12	38.62
+*/
 
 -- Insight:
--- Monthly revenue in the Chinook store remains relatively stable over time,
--- with most months generating similar revenue (~37.62). However, occasional
--- spikes in certain months indicate periods of higher sales activity,
--- while a few months show lower revenue, suggesting variability in customer purchases.
+-- Monthly revenue in the Chinook store remains relatively stable over time, with most months generating similar revenue (~37.62).
+-- However, occasional spikes in certain months indicate periods of higher sales activity.
+-- While a few months show lower revenue, suggesting variability in customer purchases.
 
 /* =========================================================
    SECTION 11: Sales Representative Performance
 
    Business Question:
-   Which sales representatives generate the highest revenue
-   for the Chinook music store?
-   ========================================================= */
+   Which sales representatives generate the highest revenue for the Chinook music store?
+    ========================================================= */
    use chinook;
-
-   select e.employeeId, e.Firstname,e.lastname, sum(i.total) as TotalRevenue
+   
+   select e.employeeId, e.Firstname +' '+e.lastname as Sales_Rep_Name, sum(i.total) as Total_Revenue
    from Employee e
    join Customer c
    on e.EmployeeId=c.SupportRepId
    join invoice i
    on c.CustomerID=i.CustomerID
    group by e.employeeId, e.Firstname,e.lastname
-   order by TotalRevenue desc;
+   order by Total_Revenue desc;
 
    /* Result:
-   3	Jane	Peacock	833.04
-    4	Margaret	Park	775.40
-    5	Steve	Johnson	720.16 */
+   employeeId	Sales_Rep_Name	Total_Revenue
+    3	Jane Peacock	833.04
+    4	Margaret Park	775.40
+    5	Steve Johnson	720.16
+    */
 
    -- Insight:
--- Jane Peacock leads in revenue generation among sales representatives,
--- indicating strong customer performance, followed by Margaret Park
--- and Steve Johnson.
+    -- Jane Peacock leads in revenue generation among sales representatives,indicating strong customer performance,
+    -- followed by Margaret Park and Steve Johnson.
 
 /* =========================================================
    SECTION 12: Top Selling Tracks Overall
 
    Business Question:
-   Which tracks are purchased the most overall
-   in the Chinook music store?
+   Which tracks are purchased the most overall in the Chinook music store?
    ========================================================= */
 
    SELECT top 10 t.Name AS TrackName,
@@ -373,10 +369,23 @@ JOIN InvoiceLine il
 GROUP BY t.Name
 ORDER BY TotalSold DESC;
 
+/* Result:
+TrackName	TotalSold
+Dazed and Confused	4
+Eruption	4
+The Number Of The Beast	4
+Untitled	4
+Sure Know Something	3
+Animal	2
+As Rosas Não Falam (Beth Carvalho)	2
+Battery	2
+Believe	2
+Better Than You	2
+*/
+
 -- Insight:
--- Multiple tracks share the highest purchase count (4), indicating no single
--- dominant track. Customer purchases are distributed across several popular
--- songs, suggesting diverse listening preferences.
+-- Multiple tracks share the highest purchase count (4), indicating no single  dominant track.
+-- Customer purchases are distributed across several popular songs, suggesting diverse listening preferences.
 
 -- Note:
 -- Multiple tracks have equal top sales, which could also be analyzed using
@@ -396,18 +405,36 @@ FROM (
 ) t
 WHERE rnk = 1;
 
+/*Result:
+TrackName	TotalSold
+Dazed and Confused	4
+Eruption	4
+The Number Of The Beast	4
+Untitled	4
+*/
+
 -- Insight:
--- Multiple tracks share the highest purchase count, indicating no single
--- dominant track. Using RANK() ensures all top-performing tracks are included,
--- reflecting equal customer preference among them.
+-- Multiple tracks share the highest purchase count, indicating no single dominant track.
+-- Customer preferences are distributed across several tracks rather than concentrated on one.
+-- Using RANK() ensures all top-performing tracks are included when ties occur.
 
 /* =========================================================
    FINAL SUMMARY
 
-   -- Key Insights:
-   -- Rock dominates genre sales.
-   -- Revenue is stable over time.
-   -- USA is the top market.
-   -- Sales reps contribute differently to revenue.
+   ---------------------------------------------------------
+-- FINAL SUMMARY
+---------------------------------------------------------
+
+-- Key Insights:
+
+-- Rock dominates genre sales and revenue, indicating strong customer preference for rock music in the Chinook store.
+
+-- Revenue remains relatively stable over time, with minor fluctuations across months, suggesting consistent purchasing behavior.
+
+-- The USA is the highest revenue-generating market, followed by Canada and France, making it the primary target region.
+
+-- Sales representatives contribute differently to revenue, highlighting variations in customer management and performance.
+
+-- Customer spending is fairly evenly distributed, with no extreme outliers, indicating balanced revenue contribution across users.
 
    ========================================================= */
