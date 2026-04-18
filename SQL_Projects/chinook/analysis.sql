@@ -418,10 +418,9 @@ Untitled	4
 -- Customer preferences are distributed across several tracks rather than concentrated on one.
 -- Using RANK() ensures all top-performing tracks are included when ties occur.
 
-/* =========================================================
-   FINAL SUMMARY
+/* 
 
-   ---------------------------------------------------------
+---------------------------------------------------------
 -- FINAL SUMMARY
 ---------------------------------------------------------
 
