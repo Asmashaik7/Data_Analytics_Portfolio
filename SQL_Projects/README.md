@@ -1,12 +1,21 @@
-# SQL Projects
+# 🗄️ SQL Projects Portfolio
 
 ## Overview
 This folder contains SQL Server (T-SQL) portfolio projects built using relational databases to answer real-world business and analytical questions.
-The focus is on query design, data exploration, and insight generation using industry-standard SQL Server practices.
+The focus is on query design, data exploration, insight generation, and Python visualizations using industry-standard SQL Server practices.
 
 ---
 
-## 📊 Brazilian E-Commerce Analysis (Olist Dataset)
+## 📁 Projects
+
+| # | Project | Database | Complexity |
+|---|---|---|---|
+| 1 | Brazilian E-Commerce Analysis | Olist Dataset | Advanced |
+| 2 | Chinook Music Store Analysis | Chinook Database | Intermediate |
+
+---
+
+## 📊 Project 1: Brazilian E-Commerce Analysis (Olist Dataset)
 
 ### Description
 An end-to-end SQL analysis of a real-world Brazilian e-commerce dataset from Olist, covering 100,000+ orders placed between 2016 and 2018.
@@ -65,49 +74,108 @@ This project simulates real-world e-commerce analytics scenarios such as custome
 
 ---
 
-## 📊 Chinook Database Analysis (SQL Server)
+## 📊 Project 2: Chinook Music Store Analysis (SQL Server + Python)
 
 ### Description
-A comprehensive SQL analysis of the Chinook music store database using SQL Server (T-SQL).
-This project simulates real-world analytics scenarios such as sales analysis, customer behavior evaluation, and revenue trend identification.
+A comprehensive end-to-end analysis of the Chinook music store database using SQL Server (T-SQL) and Python.
+This project goes beyond SQL querying — combining business analysis, SQL concepts practice, data modeling,
+and Python visualizations to deliver a complete data analyst portfolio project.
 
 ### Key SQL Concepts Used
 - SELECT, WHERE, ORDER BY
 - GROUP BY, HAVING
-- JOIN (INNER, LEFT)
+- INNER JOIN, LEFT JOIN
 - Subqueries
-- Aggregate functions
-- Date and time functions (T-SQL)
+- Window Functions — ROW_NUMBER(), RANK()
+- Aggregate functions — SUM, COUNT, AVG
+- Date and time functions (T-SQL) — YEAR(), MONTH()
+- Views, Functions, Ranking Analysis
+
+### Python & Visualization
+- **pyodbc** — Connected Python directly to SQL Server
+- **Pandas** — Loaded and manipulated data from DB
+- **Matplotlib & Seaborn** — Built 10 business charts
+- **Jupyter Notebook** — Interactive visual analysis report
+
+### Project Structure
+```
+📁 chinook/
+   📄 chinookDB.sql                    — Database creation script
+   📄 chinook_data_model.md            — Data model description
+   📄 analysis.sql                     — 12 Business analysis queries + insights
+   📁 sql_concepts/                    — SQL concepts practice
+       📄 ranking_analysis.sql         — Ranking functions
+       📄 sales_analysis.sql           — Sales focused queries
+       📄 sql_functions.sql            — SQL functions practice
+       📄 sql_views.sql                — Views practice
+   🌐 chinook_visualizations.html      — Exported visual report
+   📓 chinook_visualizations.ipynb     — Python visualizations notebook
+```
 
 ### Business Questions Answered
 - Which artists, tracks, and genres generate the highest revenue?
 - Who are the top customers based on total purchase value?
+- Who is the top customer in each country?
 - How does sales performance vary across regions?
-- What trends can be observed over time?
+- Which track is best selling within each genre?
+- How does monthly revenue trend over time?
+- Which sales representative generates the highest revenue?
+
+### Python Visualizations — 10 Charts
+
+| # | Chart | Type |
+|---|---|---|
+| 1 | Top 10 Selling Artists | Horizontal Bar |
+| 2 | Most Popular Music Genres | Pie Chart |
+| 3 | Top Revenue Generating Genres | Horizontal Bar |
+| 4 | Revenue by Country | Horizontal Bar |
+| 5 | Top Revenue Generating Customers | Horizontal Bar |
+| 6 | Top Customer per Country | Horizontal Bar |
+| 7 | Best Selling Track per Genre | Horizontal Bar |
+| 8 | Monthly Revenue Trend | Line Chart |
+| 9 | Sales Representative Performance | Vertical Bar |
+| 10 | Top Selling Tracks Overall | Horizontal Bar |
+
+### Key Business Insights
+- **Rock Dominates:** Rock contributes nearly 47% of total tracks sold and leads revenue with USD 482.13
+- **USA is Largest Market:** USA generates USD 523.06 in revenue — nearly double second place Canada
+- **Stagnant Revenue:** Monthly revenue remained flat at USD 37.62 for 5 years (2021-2025) — urgent need for growth strategy
+- **Top Customer:** Helena Holý (Czech Republic) is the highest spending customer at USD 49.62
+- **Top Sales Rep:** Jane Peacock leads sales performance with USD 833.04 in total revenue
+- **India Emerging:** India appears in top 10 markets showing strong emerging market potential
 
 ### Outcomes
-- Identified top-performing artists and genres
-- Analyzed customer purchasing behavior
-- Evaluated revenue distribution by region and time period
+- Completed 12 business analysis questions with detailed insights
+- Built 10 Python visualizations directly connected to SQL Server
+- Identified critical stagnant revenue trend over 5 years
+- Delivered complete end-to-end project — SQL + Python + Visualizations
 
 📁 Project Folder: chinook/
 
 ---
 
-## Skills Demonstrated
+## 🧠 Skills Demonstrated
 - Writing clean, optimized T-SQL queries
 - Translating business problems into SQL logic
 - Working with normalized relational database schemas
 - Advanced query techniques — CTEs, Window Functions, CASE statements
 - Data quality investigation and cross-table reconciliation
+- Connecting SQL Server to Python using pyodbc
+- Building data visualizations using Matplotlib and Seaborn
 - Generating actionable business insights from structured data
 
-## Tools & Environment
+---
+
+## 🛠️ Tools & Environment
 - SQL Server (T-SQL)
 - SQL Server Management Studio (SSMS)
+- Python (Pandas, Matplotlib, Seaborn)
+- Jupyter Notebook
 - VS Code
+- GitHub
 
-## Notes
-- This folder contains only SQL Server–based portfolio projects
-- Practice exercises and learning experiments are intentionally excluded
-- Each project includes its own detailed README.md
+---
+
+## 👤 Author
+**Asma Shaik**
+Data Analyst | SQL | Python | Data Visualization
