@@ -1,7 +1,7 @@
 # Data Analytics Portfolio
 
 Hi, I'm **Asma Shaik** 👋  
-I am an aspiring **Data Analyst** with practical experience in **SQL, Power BI, and Python**.
+I am an aspiring **Data Analyst** with practical experience in **SQL, Power BI, Python, and Excel**.
 
 This repository showcases my end-to-end analytics projects where I work with raw datasets, prepare data, build models, create dashboards, and generate business insights.
 
@@ -23,7 +23,7 @@ My focus is on turning data into clear, decision-support information for stakeho
 - Power BI
 - Matplotlib
 - Seaborn
-
+- Excel (Pivot Tables, Dashboards)
 
 **Concepts**
 - Data Cleaning & Transformation  
@@ -36,13 +36,14 @@ My focus is on turning data into clear, decision-support information for stakeho
 - GitHub
 - Jupyter Notebook
 - SQL Server
+- Power Query
 
 ---
-
 ## 📂 Repository Structure
 ```
 Data_Analytics_Portfolio/
 │
+├── Excel_Projects/
 ├── PowerBI_Projects/
 ├── Python_Projects/
 ├── SQL_Projects/
@@ -54,6 +55,21 @@ Each folder contains project-specific datasets, scripts, reports, dashboards, an
 ---
 
 ## 📊 Featured Projects
+
+### 🔹 Global Superstore — Excel Data Analysis
+**Goal:** Perform end-to-end data cleaning and business analysis using Excel and Power Query.
+
+**Highlights:**
+- Data cleaning and transformation using Power Query  
+- Created calculated columns (Delivery Days, Profit Margin)  
+- Sales, profit, and regional performance analysis  
+- Identified loss-making regions and low overall profitability (~4.7%)  
+- Built dashboard-style visualizations for business insights  
+
+📁 `Excel_Projects`  
+🔗 [View Full Project](https://github.com/Asmashaik7/MS-Excel/tree/main/Data%20cleaning-GlobalSuperStore)
+
+---
 
 ### 🔹 Credit Card Financial Analytics (Power BI + SQL)
 **Goal:** Analyze transaction behavior, revenue performance, activation, and delinquency trends.
@@ -135,7 +151,6 @@ Each folder contains project-specific datasets, scripts, reports, dashboards, an
 
 ---
 
-
 ### 🔹 Chinook Database Analysis (SQL)
 **Goal:** Practice SQL querying, aggregations, joins, and business reporting.
 
@@ -166,4 +181,3 @@ Through these projects, I demonstrate the ability to:
 I am actively looking for opportunities as a **Data Analyst / Business Analyst**, where I can apply data-driven insights to support business decision-making.
 
 If my work aligns with your needs, I would love to connect and discuss how I can contribute to your team.
-
