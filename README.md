@@ -163,7 +163,7 @@ Through these projects, I demonstrate the ability to:
 
 ## 📫 Let’s Connect
 
-I am actively looking for opportunities as a **Junior Data Analyst**.
+I am actively looking for opportunities as a **Data Analyst / Business Analyst**, where I can apply data-driven insights to support business decision-making.
 
 If my work aligns with your needs, I would love to connect and discuss how I can contribute to your team.
 
