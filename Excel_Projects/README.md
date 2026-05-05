@@ -27,4 +27,4 @@
 ---
 
 #### 🔗 Project Link  
-👉 [View Full Project] [https://github.com/Asmashaik7/MS-Excel/tree/main/Data%20cleaning-GlobalSuperStore]
+👉 **[View Full Project] (https://github.com/Asmashaik7/MS-Excel/tree/main/Data%20cleaning-GlobalSuperStore)**
