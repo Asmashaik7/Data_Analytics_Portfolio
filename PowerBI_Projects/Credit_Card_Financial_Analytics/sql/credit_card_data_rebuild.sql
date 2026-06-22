@@ -88,3 +88,53 @@ dbo.credit_card   = 10108
 Validation Status : PASSED
 Performed source-to-target validation after data import to ensure row counts matched between CSV files and SQL Server tables 
 before executing incremental load operations.*/
+
+/*====================================================================
+STEP 6 : Append Week-53 Data
+====================================================================
+Source Files
+
+cust_add.csv = 185 rows
+cc_add.csv   = 185 rows
+
+Append Queries
+*/
+
+INSERT INTO dbo.customer
+SELECT *
+FROM dbo.cust_add;
+
+INSERT INTO dbo.credit_card
+SELECT *
+FROM dbo.cc_add;
+
+
+/*====================================================================
+STEP 6 : Validate Row Counts After Append
+====================================================================*/
+
+SELECT COUNT(*) AS customer_row_count
+FROM dbo.customer;
+/*
+Result:
+10293
+*/
+
+SELECT COUNT(*) AS credit_card_row_count
+FROM dbo.credit_card;
+/*
+Result:
+10293
+*/
+
+/*
+Validation
+
+customer
+10108 + 185 = 10293
+
+credit_card
+10108 + 185 = 10293
+
+Validation Status : PASSED
+*/
