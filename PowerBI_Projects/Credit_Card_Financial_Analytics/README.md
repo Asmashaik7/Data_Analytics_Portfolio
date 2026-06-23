@@ -1,183 +1,414 @@
-# 📊 Credit Card Financial Dashboard using Power BI
+# Credit Card Financial Dashboard using Power BI
 
-## Table of Contents
+## Project Overview
 
-1. Project Title & Description
-2. Problem Statement / Objective
-3. Data Details
-4. Steps Performed
-5. DAX Queries
-6. Dashboard Screenshots
-7. Key Insights / Findings
-8. Tools & Technologies Used
-9. Future Work / Improvements
+### Project Name
 
----
+**Credit Card Customer & Transaction Analysis**
 
-## 1. Project Title & Description
+## Project Overview
 
-**Project Name:** Credit Card Transaction & Customer Analysis
+### Summary
 
-**Summary:**
-This project analyzes customer spending patterns and credit card transactions and presents interactive Power BI dashboards to derive actionable insights.
+This project analyzes customer spending behavior and credit card transaction patterns using SQL Server and Power BI. It includes data validation, incremental loading, DAX calculations, and interactive dashboards for customer and transaction analysis.
 
-**Key Highlights:**
+## Business Objective
 
-* Developed an interactive Power BI dashboard using transaction and customer data from a SQL database
-* Streamlined data processing and analysis to monitor key performance metrics and trends
-* Shared actionable insights with stakeholders to support data-driven decision-making
+To develop an interactive Credit Card Financial Dashboard that helps stakeholders monitor revenue, customer activity, transaction performance, and business trends.
 
 ---
 
-## 2. Problem Statement / Objective
+## Dataset Information
 
-To develop a comprehensive weekly credit card dashboard providing real-time insights into key performance metrics and trends, enabling stakeholders to monitor and analyze credit card operations effectively.
+### Source
+
+The dataset is sourced from a public YouTube Power BI project and is used for learning and portfolio purposes.
+
+### Tables
+
+#### Customer Table
+
+| Dataset Stage | Rows | Columns |
+|--------------|------|---------|
+| Initial Load (customer.csv) | 10,108 | 15 |
+| Incremental Load (cust_add.csv) | 185 | 15 |
+| Final Dataset | 10,293 | 15 |
+
+#### Credit Card Transaction Table
+
+| Dataset Stage | Rows | Columns |
+|--------------|------|---------|
+| Initial Load (credit_card.csv) | 10,108 | 18 |
+| Incremental Load (cc_add.csv) | 185 | 18 |
+| Final Dataset | 10,293 | 18 |
+
+### Incremental Loading Scenario
+
+This project simulates a real-world business scenario where new weekly transaction data is periodically received and appended to existing datasets.
+
+- Initial data load: 10,108 records
+- Week-53 incremental load: 185 records
+- Final dataset after append: 10,293 records
+
+Source-to-target validation was performed before and after the incremental load process to ensure data accuracy.
+
+### Relationship
+
+`Client_Num`
 
 ---
 
-## 3. Data Details
+## Data Architecture & Workflow
 
-**Source of Dataset:**
-The dataset is sourced from a YouTube tutorial/project on credit card transactions and customer analysis. It contains customer demographics, transaction details, and spending behavior. Since this is a practice project, the dataset is not real.
-
-**Tables and Size:**
-
-* **Customer Table:** 10,293 rows × 17 columns
-* **Credit Card Table:** 10,293 rows × 20 columns
-
----
-
-## 4. Steps Performed
-
-1. Data cleaning and preprocessing
-2. Exploratory Data Analysis (EDA)
-3. Creation of DAX calculated columns and measures
-4. Use of SQL queries (uploaded in the repository)
-5. Development of Power BI dashboards
-6. Extraction of key insights for stakeholders
+1. Created database and tables in SQL Server.
+2. Imported CSV files using SQL Server Import Wizard.
+3. Performed source-to-target validation.
+4. Loaded incremental Week-53 data.
+5. Built Power BI data model.
+6. Created DAX calculations.
+7. Developed dashboards.
+8. Investigated data quality issues.
+9. Rebuilt and validated the final dataset.
 
 ---
 
-## 5. DAX Queries
+## DAX Calculations
 
-### 1. Age Group – Calculated Column
+The dashboard uses calculated columns and measures to support customer segmentation, revenue calculation, and Week-over-Week (WoW) analysis.
+
+### Calculated Columns
+
+| Column | Purpose |
+|----------|----------|
+| AgeGroup | Categorizes customers into age bands |
+| IncomeGroup | Categorizes customers based on income |
+| Revenue | Calculates revenue from Annual Fees, Transaction Amount, and Interest Earned |
+| Week_num2 | Extracts week number from transaction date |
+
+### Measures
+
+| Measure | Purpose |
+|----------|----------|
+| Current_week_revenue | Revenue for the latest available week |
+| Previous_week_revenue | Revenue for the previous week |
+| wow_revenue_ratio | Week-over-Week revenue growth percentage |
+
+### Calculated Columns
+
+#### AgeGroup
 
 ```DAX
-AgeGroup = SWITCH(
+AgeGroup =
+SWITCH(
     TRUE(),
-    'public cust_detail'[customer_age] < 30, "20-30",
-    'public cust_detail'[customer_age] >= 30 && 'public cust_detail'[customer_age] < 40, "30-40",
-    'public cust_detail'[customer_age] >= 40 && 'public cust_detail'[customer_age] < 50, "40-50",
-    'public cust_detail'[customer_age] >= 50 && 'public cust_detail'[customer_age] < 60, "50-60",
-    'public cust_detail'[customer_age] >= 60, "60+",
-    "unknown"
+    customer[Customer_Age] < 30, "20-30",
+    customer[Customer_Age] >= 30 && customer[Customer_Age] < 40, "30-40",
+    customer[Customer_Age] >= 40 && customer[Customer_Age] < 50, "40-50",
+    customer[Customer_Age] >= 50 && customer[Customer_Age] < 60, "50-60",
+    customer[Customer_Age] >= 60, "60+",
+    "Unknown"
 )
 ```
 
-### 2. Income Group – Calculated Column
+#### IncomeGroup
 
 ```DAX
-IncomeGroup = SWITCH(
+IncomeGroup =
+SWITCH(
     TRUE(),
-    'public cust_detail'[income] < 35000, "Low",
-    'public cust_detail'[income] >= 35000 && 'public cust_detail'[income] < 70000, "Med",
-    'public cust_detail'[income] >= 70000, "High",
-    "unknown"
+    customer[Income] < 35000, "Low",
+    customer[Income] >= 35000 && customer[Income] < 70000, "Medium",
+    customer[Income] >= 70000, "High",
+    "Unknown"
 )
 ```
 
-### 3. Week Number – Calculated Column
-
-```DAX
-week_num2 = WEEKNUM('public cc_detail'[week_start_date])
-```
-
-### 4. Revenue – Calculated Column
+#### Revenue
 
 ```DAX
 Revenue =
-    'public cc_detail'[annual_fees] +
-    'public cc_detail'[total_trans_amt] +
-    'public cc_detail'[interest_earned]
+credit_card[Annual_Fees] +
+credit_card[Total_Trans_Amt] +
+credit_card[Interest_Earned]
 ```
 
-### 5. Current Week Revenue – Measure
+#### Week_num2
 
 ```DAX
-Current_week_revenue = CALCULATE(
+Week_num2 =
+WEEKNUM(credit_card[Week_Start_Date])
+```
+
+### Measures
+
+#### Current Week Revenue
+
+```DAX
+Current_week_revenue =
+CALCULATE(
     SUM(credit_card[Revenue]),
     FILTER(
         ALL(credit_card),
-        credit_card[Week_num2] = MAX(credit_card[Week_num2])
+        credit_card[Week_num2] =
+        MAX(credit_card[Week_num2])
     )
 )
 ```
 
-### 6. Previous Week Revenue – Measure
+#### Previous Week Revenue
 
 ```DAX
-Previous_week_revenue = CALCULATE(
+Previous_week_revenue =
+CALCULATE(
     SUM(credit_card[Revenue]),
     FILTER(
         ALL(credit_card),
-        credit_card[Week_num2] = MAX(credit_card[Week_num2]) - 1
+        credit_card[Week_num2] =
+        MAX(credit_card[Week_num2]) - 1
     )
 )
 ```
 
-### 7. WoW Revenue Ratio – Measure
+#### WoW Revenue Ratio
 
 ```DAX
-wow_revenue_ratio = DIVIDE(
-    credit_card[Current_week_revenue] - credit_card[Previous_week_revenue],
+wow_revenue_ratio =
+DIVIDE(
+    credit_card[Current_week_revenue] -
+    credit_card[Previous_week_revenue],
     credit_card[Previous_week_revenue]
 )
 ```
 
----
+### KPI Validation
 
-## 6. Dashboard Screenshots
+A separate KPI Validation page was created to verify:
 
-**Credit Card Customer Analysis Dashboard**
+- Current Week Revenue
+- Previous Week Revenue
+- WoW Revenue Ratio
+- Delinquency Rate
+- Activation Rate
 
-<img src="./CreditCard-Customer-dashboard.png" alt="Credit Card Customer Analysis Dashboard" width="600">
-
-**Credit Card Transaction Dashboard**
-
-<img src="./CreditCard-Transaction-dashboard.png" alt="Credit Card Transaction Dashboard" width="600">
-
----
-
-## 7. Key Insights / Findings (Week 53 – 31st Dec)
-
-**Week-on-Week (WoW) Change:**
-
-* Revenue increased by 28.8%
-* Total transaction amount increased by 262,331 (35.04% increase compared to the previous week)
-* Number of customers increased from 124 to 185 (49.19% increase)
-
-**Year-to-Date (YTD) Overview:**
-
-* Overall revenue: 57M
-* Total interest earned: 8M
-* Total transaction amount: 46M
-* Male customers contributed 31M, female customers contributed 26M
-* Blue and Silver credit cards accounted for 93% of overall transactions
-* TX, NY, and CA contributed 68% of overall transactions
-* Overall activation rate: 57.5%
-* Overall delinquent rate: 6.06%
+before publishing the final dashboards.
 
 ---
 
-## 8. Tools & Technologies Used
+## Dashboard Screenshots
 
-* SQL
-* Power BI
-* Excel
+### Customer Analysis Dashboard
+
+This dashboard provides customer-centric insights by analyzing revenue contribution, customer satisfaction score (CSS), age groups, income groups, marital status, education levels, and state-wise performance. It helps identify key customer segments contributing to overall business revenue.
+
+![Customer Dashboard](screenshots/customer_dashboard.png)
+
+### Transaction Analysis Dashboard
+
+This dashboard focuses on credit card transaction performance, including revenue trends, transaction amounts, interest earned, card category analysis, expenditure patterns, and Week-over-Week (WoW) revenue growth. It enables stakeholders to monitor business performance and transaction behavior effectively.
+
+![Transaction Dashboard](screenshots/transaction_dashboard.png)
+
+### Data Model
+
+The Power BI model consists of customer and credit_card tables connected through Client_Num.
+
+![Data Model](screenshots/data_model.png)
+
+### Source-to-Target Validation
+
+Validation performed after importing raw source files into SQL Server.
+
+![Source to Target Validation](screenshots/source_to_target_validation.png)
+
+### Duplicate Relationship Error
+
+While validating the incremental data load process, Power BI generated relationship refresh errors due to duplicate `Client_Num` values in the SQL Server tables.
+
+Investigation revealed that Week-53 data had been loaded multiple times, resulting in duplicate customer and transaction records. The issue was resolved by rebuilding the tables from the original source files, validating row counts, and performing a clean append process.
+
+![Duplicate Error](screenshots/duplicate_error.png)
 
 ---
 
-## 9. Future Work / Improvements
+## Key Insights
 
-* Add predictive modeling for churn and fraud detection
-* Incorporate more granular customer segmentation
+### Week-53 Analysis
+
+#### Week-over-Week Performance
+
+- Revenue increased by **28.8%**
+- Transaction Amount increased by **35.04%**
+- Customer count increased from **124 to 185**
+- Customer growth increased by **49.19%**
+
+#### Year-to-Date Overview
+
+- Total Revenue: **57M**
+- Total Interest Earned: **8M**
+- Total Transaction Amount: **46M**
+- Male Customers Revenue: **31M**
+- Female Customers Revenue: **26M**
+
+#### Additional Findings
+
+- Blue and Silver cards contributed approximately **93%** of total transactions.
+- Swipe transactions generated the highest revenue contribution among all transaction modes.
+- Businessmen, white-collar professionals, and self-employed customers contributed a significant share of overall revenue.
+- TX, NY, and CA contributed approximately **68%** of overall transactions.
+- Overall Activation Rate: **57.5%**
+- Overall Delinquent Rate: **6.06%**
+
+---
+
+## Challenges & Troubleshooting
+
+### Datatype Overflow Issue
+
+While loading transaction data into SQL Server, a datatype overflow issue was encountered.
+
+#### Root Cause
+
+The column:
+
+`Total_Trans_Amt`
+
+was defined as **SMALLINT**.
+
+However, transaction values reached:
+
+`79,463`
+
+which exceeded the SMALLINT maximum value of:
+
+`32,767`
+
+#### Resolution
+
+- Investigated schema using INFORMATION_SCHEMA.COLUMNS.
+- Validated maximum transaction value using SQL queries.
+- Identified the problematic record.
+- Altered datatype from SMALLINT to INT.
+- Successfully completed the data load.
+
+**Reference File:**  
+`sql/credit_card_smallint_overflow_analysis.sql`
+
+---
+
+### Duplicate Records Investigation
+
+During project maintenance and validation, duplicate records were identified after repeated incremental load operations.
+
+#### Symptoms
+
+- Unexpected row counts.
+- Duplicate customer records.
+- Duplicate transaction records.
+- Power BI relationship refresh failures.
+
+#### Investigation Activities
+
+- Source-to-target validation.
+- Row count reconciliation.
+- Duplicate record analysis.
+- Incremental load verification.
+- Power BI refresh troubleshooting.
+
+#### Power BI Relationship Error
+
+![Duplicate Relationship Error](screenshots/duplicate_error.png)
+
+#### Resolution
+
+- Rebuilt database tables.
+- Re-imported raw source files.
+- Performed row count validation.
+- Executed a clean incremental load.
+- Verified final row counts.
+- Successfully refreshed Power BI dashboards.
+
+**Reference File:**  
+`sql/credit_card_data_rebuild.sql`
+
+#### Key Learnings
+
+- Importance of source-to-target validation before reporting and analysis.
+- Importance of row count reconciliation during data loading and incremental updates.
+- Understanding how duplicate records can impact Power BI relationships and dashboard accuracy.
+- Managing incremental data loads carefully to avoid duplicate data insertion.
+- Importance of selecting appropriate datatypes during database design.
+- Understanding the role of Primary Keys and unique identifiers in maintaining data integrity.
+- Learned that while this practice project did not enforce Primary Key constraints, production systems should use Primary Keys or unique constraints to prevent  duplicate records during incremental loads.
+- Understanding how data quality issues in upstream systems can directly impact downstream reporting and business intelligence solutions.
+
+---
+
+## SQL Scripts Included
+
+### credit_card_schema_setup.sql
+
+Contains database and table creation scripts used for initial project setup.
+
+### credit_card_smallint_overflow_analysis.sql
+
+Documents investigation and resolution of the SMALLINT datatype overflow issue encountered during data loading.
+
+### credit_card_data_rebuild.sql
+
+Documents source-to-target validation, duplicate record investigation, data recovery, and final incremental load process.
+
+---
+
+## Repository Structure
+
+```text
+Credit_Card_Financial_Analysis
+│
+├── README.md
+│
+├── sql
+│   ├── credit_card_schema_setup.sql
+│   ├── credit_card_smallint_overflow_analysis.sql
+│   └── credit_card_data_rebuild.sql
+│
+├── screenshots
+│   ├── source_to_target_validation.png
+│   ├── data_model.png
+│   ├── customer_dashboard.png
+│   ├── transaction_dashboard.png
+│   └── duplicate_error.png
+│
+└── powerbi
+    └── Credit_Card_Financial_Dashboard.pbix
+```
+
+---
+
+## Tools & Technologies
+
+- SQL Server
+- SQL Server Management Studio (SSMS)
+- Power BI Desktop
+- Power Query
+- DAX
+- Excel
+
+---
+
+## Future Improvements
+
+- Predictive analytics for customer churn.
+- Fraud detection analysis.
+- Advanced customer segmentation.
+- Automated incremental data loading.
+- Power BI Service deployment.
+
+---
+
+## Author
+
+**Asma Shaik**
+
+Data Analyst | SQL | Power BI | Python
+
+GitHub: https://github.com/Asmashaik7
