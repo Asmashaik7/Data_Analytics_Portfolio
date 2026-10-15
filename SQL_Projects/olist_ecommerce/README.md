@@ -56,7 +56,7 @@ The dataset contains transactional data from **2016 to 2018** across multiple ta
 
 | # | Business Question | Key Finding |
 |---|---|---|
-| Q1 | How many unique customers exist? | 96,096 unique customers (3,345 placed repeat orders) |
+| Q1 | How many unique customers exist? | 96,096 unique customers. Repeat customers were counted separately using customer_unique_id |
 | Q2 | What is the order status distribution? | 97% successfully delivered, 0.6% cancellation rate |
 | Q3 | What is the total platform revenue? | 16,008,872 BRL total revenue |
 | Q4 | Which product categories generate most revenue? | Beauty & Health leads at 1,441,248 BRL |
@@ -84,7 +84,7 @@ The dataset contains transactional data from **2016 to 2018** across multiple ta
 | Q12 | Month-over-month order growth | Used LAG(); biggest spike November 2017 (+2,913 orders) — Black Friday effect |
 | Q13 | Rank product categories by revenue | Used DENSE_RANK(); 74 categories; Beauty & Health #1 |
 | Q14 | Running total of revenue | Used SUM() OVER(); crossed 5M BRL milestone in October 2017 |
-| Q15 | Repeat vs one-time buyers | 97% one-time buyers vs only 3% repeat customers |
+| Q15 | Repeat vs one-time buyers | 2,997 repeat customers (3.1%) and 93,099 one-time customers (96.9%) |
 
 ---
 
@@ -92,6 +92,7 @@ The dataset contains transactional data from **2016 to 2018** across multiple ta
 
 **1. Customer Retention Crisis 🚨**
 > 97% of customers made only one purchase. Olist urgently needs loyalty programs, discount campaigns, and retention strategies to convert one-time buyers into repeat customers.
+Approximately 96.9% of customers made only one purchase, while 3.1% placed repeat orders. Olist could explore loyalty programs, targeted offers, and retention campaigns to encourage customers to return.
 
 **2. B2B Opportunity Detected 💼**
 > The highest spending customer purchased 8 identical landline phones worth 13,664 BRL — clearly a B2B wholesale transaction. Olist could benefit from a dedicated B2B sales channel with volume discounts.
