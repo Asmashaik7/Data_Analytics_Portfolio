@@ -17,8 +17,7 @@ The goal was to answer real business questions a data analyst would face in an e
 
 ## 🗂️ Dataset Description
 
-The Olist dataset contains 9 tables in total. This SQL analysis uses 5 core tables.  Remaining 4 tables (sellers, reviews, geolocation, category translation) 
- will be incorporated in the upcoming Power BI dashboard extension.
+The Olist dataset contains 9 tables in total. This SQL analysis uses 5 core tables. The Power BI dashboard extends the analysis with interactive visuals covering sales performance, customer behavior, cancellation trends, payment methods, and delivery performance.
  
 The dataset contains transactional data from **2016 to 2018** across multiple tables:
 
@@ -91,8 +90,7 @@ The dataset contains transactional data from **2016 to 2018** across multiple ta
 ## 💡 Key Business Insights
 
 **1. Customer Retention Crisis 🚨**
-> 97% of customers made only one purchase. Olist urgently needs loyalty programs, discount campaigns, and retention strategies to convert one-time buyers into repeat customers.
-Approximately 96.9% of customers made only one purchase, while 3.1% placed repeat orders. Olist could explore loyalty programs, targeted offers, and retention campaigns to encourage customers to return.
+> Approximately 96.9% of customers made only one purchase, while 3.1% placed repeat orders. Olist could explore loyalty programs, targeted offers, and retention campaigns to encourage customers to return.
 
 **2. B2B Opportunity Detected 💼**
 > The highest spending customer purchased 8 identical landline phones worth 13,664 BRL — clearly a B2B wholesale transaction. Olist could benefit from a dedicated B2B sales channel with volume discounts.
@@ -130,14 +128,6 @@ Brazilian-Ecommerce-SQL-Analysis/
 - ✅ Advanced SQL — CTEs, Window Functions, DATE functions
 - ✅ Independent data investigation and bonus analysis
 - ✅ Clear documentation of findings and recommendations
-
----
-
-## 🔜 Next Steps
-
-- [ ] Build interactive Power BI dashboard on this dataset
-- [ ] Add geographic delivery analysis visualizations
-- [ ] Customer segmentation deep dive
 
 ---
 
