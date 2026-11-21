@@ -99,6 +99,28 @@ Each folder contains project-specific datasets, scripts, reports, dashboards, an
 
 ---
 
+
+---
+
+### 🔹 Brazilian E-Commerce Analytics – Olist (Power BI + SQL)
+
+**Goal:** Analyze Brazilian e-commerce business performance, customer behavior, order cancellations, and delivery operations using SQL and Power BI.
+
+**Highlights:**
+
+- SQL-based data analysis using SQL Server
+- Interactive Power BI dashboard development
+- Executive overview of e-commerce performance
+- Customer and geographic insights
+- Order cancellation analysis
+- Delivery performance and delay analysis
+- Business insights through interactive visualizations
+
+📁 `PowerBI_Projects/Brazilian_Ecommerce_Olist`
+
+🔗 [View Full Power BI Project](https://github.com/Asmashaik7/Data_Analytics_Portfolio/tree/main/PowerBI_Projects/Brazilian_Ecommerce_Olist)
+
+---
 ### 🔹 HR Analytics – Employee Performance & Retention (Python)
 **Goal:** Understand workforce patterns and factors affecting retention.
 
